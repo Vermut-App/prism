@@ -51,7 +51,7 @@ class Text
         $data = $response->json();
 
         $responseMessage = new AssistantMessage(
-            data_get($data, 'output.' . (count($data) - 1) . '.content.0.text') ?? '',
+            data_get($data, 'output.' . (count(data_get($data, 'output')) - 1) . '.content.0.text') ?? '',
             ToolCallMap::map(
                 array_filter(data_get($data, 'output', []), fn (array $output): bool => $output['type'] === 'function_call'),
                 array_filter(data_get($data, 'output', []), fn (array $output): bool => $output['type'] === 'reasoning'),
@@ -132,7 +132,7 @@ class Text
     protected function addStep(array $data, Request $request, ClientResponse $clientResponse, array $toolResults = []): void
     {
         $this->responseBuilder->addStep(new Step(
-            text: data_get($data, 'output.' . (count($data) - 1) . '.content.0.text') ?? '',
+            text: data_get($data, 'output.' . (count(data_get($data, 'output')) - 1) . '.content.0.text') ?? '',
             finishReason: $this->mapFinishReason($data),
             toolCalls: ToolCallMap::map(array_filter(data_get($data, 'output', []), fn (array $output): bool => $output['type'] === 'function_call')),
             toolResults: $toolResults,

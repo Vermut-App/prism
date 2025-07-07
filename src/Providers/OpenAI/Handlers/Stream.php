@@ -313,7 +313,7 @@ class Stream
     protected function mapFinishReason(array $data): FinishReason
     {
         $eventType = Str::after(data_get($data, 'type'), 'response.');
-        $lastOutputType = data_get($data, 'response.output.' . (count($data) - 1) . '.type');
+        $lastOutputType = data_get($data, 'response.output.' . (count(data_get($data, 'output')) - 1) . '.type');
 
         return FinishReasonMap::map($eventType, $lastOutputType);
     }
