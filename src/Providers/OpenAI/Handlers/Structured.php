@@ -47,10 +47,10 @@ class Structured
 
         $data = $response->json();
 
-        $this->handleRefusal(data_get($data, 'output.{last}.content.0', []));
+        $this->handleRefusal(data_get($data, 'output.' . (count($data) - 1) . '.content.0', []));
 
         $responseMessage = new AssistantMessage(
-            data_get($data, 'output.{last}.content.0.text') ?? '',
+            data_get($data, 'output.' . (count($data) - 1) . '.content.0.text') ?? '',
         );
 
         $this->responseBuilder->addResponseMessage($responseMessage);
@@ -68,7 +68,7 @@ class Structured
     protected function addStep(array $data, Request $request, ClientResponse $clientResponse): void
     {
         $this->responseBuilder->addStep(new Step(
-            text: data_get($data, 'output.{last}.content.0.text') ?? '',
+            text: data_get($data, 'output.' . (count($data) - 1) . '.content.0.text') ?? '',
             finishReason: $this->mapFinishReason($data),
             usage: new Usage(
                 promptTokens: data_get($data, 'usage.input_tokens', 0) - data_get($data, 'usage.input_tokens_details.cached_tokens', 0),
